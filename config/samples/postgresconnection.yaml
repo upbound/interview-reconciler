@@ -1,0 +1,12 @@
+apiVersion: example.com/v1alpha1
+kind: PostgresConnection
+metadata:
+  name: my-app-db
+  namespace: default
+spec:
+  host: postgres.default.svc.cluster.local
+  port: 5432
+  database: myapp
+  credentials:
+    secretRef:
+      name: db-creds

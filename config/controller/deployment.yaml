@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: interview-reconciler-controller
+  namespace: default
+  labels:
+    app: interview-reconciler-controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: interview-reconciler-controller
+  template:
+    metadata:
+      labels:
+        app: interview-reconciler-controller
+    spec:
+      serviceAccountName: interview-reconciler-controller
+      containers:
+      - name: controller
+        image: interview-reconciler-controller
+        imagePullPolicy: IfNotPresent
+        command:
+        - /ko-app/controller
+        ports:
+        - containerPort: 8080
+          name: metrics
+          protocol: TCP
+        - containerPort: 8081
+          name: health
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: health
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: health
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+          limits:
+            cpu: 100m
+            memory: 128Mi
+          requests:
+            cpu: 100m
+            memory: 64Mi

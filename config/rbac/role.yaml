@@ -1,0 +1,40 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: interview-reconciler-controller
+rules:
+- apiGroups:
+  - example.com
+  resources:
+  - postgresconnections
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - example.com
+  resources:
+  - postgresconnections/status
+  verbs:
+  - get
+  - update
+  - patch
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - patch
